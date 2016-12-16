@@ -4,6 +4,7 @@ import os
 import praw
 import csv
 import numpy as np
+import time
 
 os.chdir('C:\Users\Benjamin\Documents\GitHub\MemeWatch')
 
@@ -11,9 +12,13 @@ reddit = praw.Reddit(client_id='cr6fA22zW_2ZqA',
                 client_secret='8cw3h11hDyCu3rfKvt4PTpaL-Q0',
                 user_agent='python:ch.memewat:v0.0.1 (by /u/boe6eod7nty')
 
-memes = ['pepe','me irl','dat boi']
+memes = [['pepe'],['me_irl','me irl','meirl'],['dat boi','dat_boi']]
 
 try:
+    f = open('data2.csv','w')
+    f.truncate()
+    f.close()
+    
     x=0
     postsGrabbed = list(reddit.subreddit('all').hot(limit=10))
     for eachPost in postsGrabbed[:-1]:
@@ -27,16 +32,21 @@ try:
     saveFile.write(saveLine)
     saveFile.close()
     
-    '''
+    
+    currTime = time.strftime('%a-%H-%M')
+    
     n=0
-    title, score = np,loadtxt('data2.csv',
+    fileDate = open('%s.csv' % currTime, 'w+')
+    title, score = np.loadtxt('data2.csv',
                               delimiter=',',
                               unpack=True,
                               dtype='str')
     for eachRow in title[:-1]:
-        saveLine = eachRow+','+score[n]+'\n'
-        save
-    '''
+        for meme in memes:
+            for spelling in meme:
+                if spelling in title:
+                    pass
+
 except Exception, e:
     print('TypeError: ',str(e))
 
