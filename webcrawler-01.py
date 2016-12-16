@@ -6,7 +6,7 @@ import csv
 import numpy as np
 import time
 
-os.chdir('C:\Users\Benjamin\Documents\GitHub\MemeWatch')
+#os.chdir('/Users/andersonbe/MemeWatch')
 
 reddit = praw.Reddit(client_id='cr6fA22zW_2ZqA',
                 client_secret='8cw3h11hDyCu3rfKvt4PTpaL-Q0',
@@ -15,41 +15,52 @@ reddit = praw.Reddit(client_id='cr6fA22zW_2ZqA',
 memes = [['pepe'],['me_irl','me irl','meirl'],['dat boi','dat_boi']]
 
 try:
-    f = open('data2.csv','w')
-    f.truncate()
-    f.close()
-    
-    x=0
-    postsGrabbed = list(reddit.subreddit('all').hot(limit=10))
-    for eachPost in postsGrabbed[:-1]:
-        saveLine = eachPost.title+','+str(eachPost.score)+'\n'
+    print(reddit.subreddit('worldnews').title)
+except Exception, e:
+    print('TypeError: ',str(e),', Unable to connect to /r/worldnews subreddit')
+else:
+    try:
+        #empties data2.csv for new writing
+        f = open('data2.csv','w')
+        f.truncate()
+        f.close()
+        
+        #Writes top X posts in /r/all into data2.csv as title & score
+        x=0
+        postsGrabbed = list(reddit.subreddit('all').hot(limit=10))
+        for eachPost in postsGrabbed[:-1]:
+            saveLine = eachPost.title+','+str(eachPost.score)+'\n'
+            saveFile = open('data2.csv','a')
+            saveFile.write(saveLine)
+            saveFile.close()
+            x+=1
+        saveLine = postsGrabbed[-1].title+','+str(postsGrabbed[-1].score)
         saveFile = open('data2.csv','a')
         saveFile.write(saveLine)
         saveFile.close()
-        x+=1
-    saveLine = postsGrabbed[-1].title+','+str(postsGrabbed[-1].score)
-    saveFile = open('data2.csv','a')
-    saveFile.write(saveLine)
-    saveFile.close()
-    
-    
-    currTime = time.strftime('%a-%H-%M')
+        
+    except Exception, e:
+        print('TypeError: ',str(e))
+
+try:
+    #creates/re-writes to DAY-HH-MM.csv file, records 
+    currTime = 'records/'+time.strftime('%a-%H-%M')
     
     n=0
     fileDate = open('%s.csv' % currTime, 'w+')
-    title, score = np.loadtxt('data2.csv',
+    title, score = np.genfromtxt('data2.csv',
                               delimiter=',',
                               unpack=True,
-                              dtype='str')
+                              dtype='str',
+                              usecols=np.arange(0,1))
     for eachRow in title[:-1]:
         for meme in memes:
             for spelling in meme:
                 if spelling in title:
                     pass
-
+    
 except Exception, e:
     print('TypeError: ',str(e))
-
 
 '''
 for submission in reddit.subreddit('all').hot(limit=10):
