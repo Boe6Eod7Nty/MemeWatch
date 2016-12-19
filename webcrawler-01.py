@@ -44,7 +44,7 @@ else:
 
 try:
     #creates/re-writes to DAY-HH-MM.csv file, records 
-    currTime = 'records/'+time.strftime('%a-%H-%M')
+    currTime = 'records/'+time.strftime('%a-%H-')+str(int(time.strftime('%M'))-(int(time.strftime('%M'))%5))
     
     n=0
     fileDate = open('%s.csv' % currTime, 'w+')
