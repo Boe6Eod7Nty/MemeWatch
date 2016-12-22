@@ -65,12 +65,13 @@ try:
                     try:
                         title.index(meme)
                     except Exception, e:
-                        saveLine = '\"'+meme[0]+'\",'+title[1]+'\n'
+                        saveLine = '\"'+meme[0]+'\",'+eachRow[1]+'\n'
                         saveFile = open('%s.csv' % currTime,'a')
                         saveFile.write(saveLine)
                         saveFile.close()
                     else:
                         pass
+                        title[title.index(meme)][1] += eachRow[1]
     
 except Exception, e:
     print('TypeError: ',str(e))
